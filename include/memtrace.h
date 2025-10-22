@@ -1,7 +1,10 @@
 #ifndef MALLOC_TRACE_H
 #define MALLOC_TRACE_H
 
-#include <linux/types.h>
+
+#include <bpf/bpf_helpers.h>
+#include <bpf/bpf_tracing.h>
+#include "vmlinux.h"
 
 #define COMMAND_LEN     16 
 #define MESSAGE_LEN     12
@@ -10,14 +13,15 @@
 struct data_t
 {
     u32 pid; 
-    u32 uid; 
+    u32 uid;
+    u32 tgid; 
     u64 ts; 
     u64 bytes_alloc; 
     u64 bytes_freed; 
     int cpu; 
     char command[COMMAND_LEN]; 
-    char message[MESSAGE_LEN; 
-    char path[PATH_LEN; 
+    char message[MESSAGE_LEN]; 
+    char path[PATH_LEN]; 
 }; 
 
 
