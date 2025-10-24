@@ -28,8 +28,7 @@ struct{
     __uint(max_entries, 65536); 
 }active_allocs SEC(".maps"); 
 
-
-SEC("uprobe/malloc_enter") 
+SEC("uprobe/libc.so.6:malloc")
 int BPF_KPROBE(on_malloc_enter, size_t size) 
 {
     u32 pid = bpf_get_current_pid_tgid() >> 32; 
@@ -38,7 +37,7 @@ int BPF_KPROBE(on_malloc_enter, size_t size)
     return 0; 
 }
 
-SEC("uretprobe/malloc_exit") 
+SEC("uretprobe/libc.so.6:malloc")
 int BPF_KRETPROBE(on_malloc_exit, void *ptr)
 {
     if(!ptr)
@@ -69,8 +68,7 @@ int BPF_KRETPROBE(on_malloc_exit, void *ptr)
 
     return 0; 
 }
-
-SEC("uprobe/free_enter")
+SEC("uprobe/libc.so.6:free")
 int BPF_KPROBE(on_free_enter, void *ptr)
 {
     if (!ptr)
